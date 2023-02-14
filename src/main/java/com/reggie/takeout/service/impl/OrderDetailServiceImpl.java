@@ -7,8 +7,10 @@ import com.reggie.takeout.service.OrderDetailService;
 import org.springframework.stereotype.Service;
 
 
+/**
+ * @author shenlijia
+ */
 @Service
 public class OrderDetailServiceImpl extends ServiceImpl<OrderDetailMapper, OrderDetail> implements OrderDetailService {
-
 }
 

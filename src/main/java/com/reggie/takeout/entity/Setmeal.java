@@ -8,6 +8,9 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+/**
+ * @author shenlijia
+ */
 @Data
 public class Setmeal implements Serializable {
 

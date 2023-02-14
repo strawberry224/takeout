@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.SQLIntegrityConstraintViolationException;
 
+/**
+ * @author shenlijia
+ */
 @ControllerAdvice(annotations = {RestController.class, Controller.class})
 @ResponseBody
 public class GlobalExceptionHandler {
@@ -15,7 +18,9 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
     public R<String> exceptionHandler(SQLIntegrityConstraintViolationException e) {
         String message = e.getMessage();
-        if (message.contains("Duplicate entry")) {
+        String error = "Duplicate entry";
+
+        if (message.contains(error)) {
             String s = message.split(" ")[2].replaceAll("'", "");
             return R.error(s + "已经存在");
         }

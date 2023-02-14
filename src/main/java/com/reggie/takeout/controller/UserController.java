@@ -5,15 +5,18 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.reggie.takeout.common.R;
 import com.reggie.takeout.entity.User;
 import com.reggie.takeout.service.UserService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 import java.util.Map;
 
+/**
+ * @author shenlijia
+ */
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -21,16 +24,28 @@ public class UserController {
     @Resource
     private UserService userService;
 
+    @Resource
+    private RedisTemplate redisTemplate;
+
+    @Resource
+    private CacheManager cacheManager;
+
+    @Cacheable(value = "userCache", key = "#id")
+    @GetMapping
+    public R<User> getById(@RequestParam("id") Long id) {
+        User user = userService.getById(id);
+        return R.success(user);
+    }
+
     @PostMapping("/login")
     public R<User> login(HttpSession session, @RequestBody Map map) {
-
         String phone = map.get("phone").toString();
         String code = map.get("code").toString();
 
-        Object sessionCode = session.getAttribute("code");
-        sessionCode = sessionCode == null ? "1234" : sessionCode.toString();
+        redisTemplate.opsForValue().set(phone, "1234");
+        Object smsCode = redisTemplate.opsForValue().get(phone);
 
-        if (sessionCode == null || !sessionCode.toString().equals(code)) {
+        if (smsCode == null || !smsCode.toString().equals(code)) {
             R.error("验证码错误");
         }
 
@@ -45,6 +60,7 @@ public class UserController {
         }
 
         session.setAttribute("user", user.getId());
+        redisTemplate.delete(phone);
         return R.success(user);
     }
 }

@@ -5,6 +5,9 @@ import com.reggie.takeout.entity.Orders;
 import org.apache.ibatis.annotations.Mapper;
 
 
+/**
+ * @author shenlijia
+ */
 @Mapper
 public interface OrdersMapper extends BaseMapper<Orders> {
 }

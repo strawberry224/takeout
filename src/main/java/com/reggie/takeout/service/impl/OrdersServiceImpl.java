@@ -25,6 +25,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 
+/**
+ * @author shenlijia
+ */
 @Service
 public class OrdersServiceImpl extends ServiceImpl<OrdersMapper, Orders> implements OrdersService {
 
@@ -37,7 +40,8 @@ public class OrdersServiceImpl extends ServiceImpl<OrdersMapper, Orders> impleme
     @Resource
     private OrderDetailService orderDetailService;
 
-    @Transactional
+    @Override
+    @Transactional(rollbackFor = Exception.class)
     public void submit(Orders orders) {
         Long userId = BasicContext.getCurrentId();
 

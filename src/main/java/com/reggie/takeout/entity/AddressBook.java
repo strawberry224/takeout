@@ -7,6 +7,9 @@ import lombok.Data;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+/**
+ * @author shenlijia
+ */
 @Data
 public class AddressBook implements Serializable {
     private static final long serialVersionUID = 1L;

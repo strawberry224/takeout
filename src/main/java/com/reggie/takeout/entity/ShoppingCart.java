@@ -9,6 +9,9 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 
+/**
+ * @author shenlijia
+ */
 @Data
 public class ShoppingCart implements Serializable {
     private static final long serialVersionUID = 1L;

@@ -15,6 +15,9 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.io.Serializable;
 
+/**
+ * @author shenlijia
+ */
 @Service
 public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category>
         implements CategoryService {

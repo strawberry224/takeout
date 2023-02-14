@@ -7,6 +7,9 @@ import com.reggie.takeout.service.UserService;
 import org.springframework.stereotype.Service;
 
 
+/**
+ * @author shenlijia
+ */
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 }

@@ -13,6 +13,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.UUID;
 
+/**
+ * @author shenlijia
+ */
 @Slf4j
 @RestController
 @RequestMapping("/common")

@@ -17,6 +17,9 @@ import javax.annotation.Resource;
 import java.util.List;
 
 
+/**
+ * @author shenlijia
+ */
 @Slf4j
 @RestController
 @RequestMapping("shoppingCart")

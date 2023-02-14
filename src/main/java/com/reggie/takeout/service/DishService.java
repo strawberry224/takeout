@@ -4,6 +4,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.reggie.takeout.dto.DishDto;
 import com.reggie.takeout.entity.Dish;
 
+/**
+ * @author shenlijia
+ */
 public interface DishService extends IService<Dish> {
 
     void saveWithFlavor(DishDto dishDto);

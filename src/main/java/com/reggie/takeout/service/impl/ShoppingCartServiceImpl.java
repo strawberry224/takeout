@@ -7,8 +7,10 @@ import com.reggie.takeout.service.ShoppingCartService;
 import org.springframework.stereotype.Service;
 
 
+/**
+ * @author shenlijia
+ */
 @Service
 public class ShoppingCartServiceImpl extends ServiceImpl<ShoppingCartMapper, ShoppingCart> implements ShoppingCartService {
-
 }
 

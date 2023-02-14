@@ -6,6 +6,9 @@ import com.reggie.takeout.mapper.SetmealDishMapper;
 import com.reggie.takeout.service.SetmealDishService;
 import org.springframework.stereotype.Service;
 
+/**
+ * @author shenlijia
+ */
 @Service
 public class SetmealDishServiceImpl extends ServiceImpl<SetmealDishMapper, SetmealDish> implements SetmealDishService {
 }

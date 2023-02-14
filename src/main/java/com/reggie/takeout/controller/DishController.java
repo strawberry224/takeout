@@ -12,35 +12,45 @@ import com.reggie.takeout.service.CategoryService;
 import com.reggie.takeout.service.DishFlavorService;
 import com.reggie.takeout.service.DishService;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 
+/**
+ * @author shenlijia
+ */
 @RestController
 @RequestMapping("/dish")
 public class DishController {
 
-    @Autowired
+    @Resource
     private DishService dishService;
 
-    @Autowired
+    @Resource
     private DishFlavorService dishFlavorService;
 
-    @Autowired
+    @Resource
     private CategoryService categoryService;
+
+    @Resource
+    private RedisTemplate redisTemplate;
 
     @PostMapping
     public R<String> save(@RequestBody DishDto dish) {
         dishService.saveWithFlavor(dish);
+        redisTemplate.keys("dish:*").forEach(key -> redisTemplate.delete(key));
         return R.success("新增菜品成功");
     }
 
     @PutMapping
     public R<String> update(@RequestBody DishDto dish) {
         dishService.updateWithFlavor(dish);
+        redisTemplate.keys("dish:*").forEach(key -> redisTemplate.delete(key));
         return R.success("更新菜品成功");
     }
 
@@ -52,8 +62,16 @@ public class DishController {
 
     @GetMapping("/list")
     public R<List<DishDto>> list(Dish dish) {
+        Long categoryId = dish.getCategoryId();
+        String key = "dish:" + categoryId;
+
+        Object dishes = redisTemplate.opsForValue().get(key);
+        if (dishes != null) {
+            return R.success((List<DishDto>) dishes);
+        }
+
         LambdaQueryWrapper<Dish> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(dish.getCategoryId() != null, Dish::getCategoryId, dish.getCategoryId());
+        queryWrapper.eq(categoryId != null, Dish::getCategoryId, categoryId);
         queryWrapper.eq(Dish::getStatus, 1);
         queryWrapper.orderByAsc(Dish::getSort).orderByDesc(Dish::getUpdateTime);
 
@@ -76,6 +94,7 @@ public class DishController {
 
         }).collect(Collectors.toList());
 
+        redisTemplate.opsForValue().set(key, collect, 60, TimeUnit.MINUTES);
         return R.success(collect);
     }
 

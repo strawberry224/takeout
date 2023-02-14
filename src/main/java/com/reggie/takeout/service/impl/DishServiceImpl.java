@@ -9,20 +9,24 @@ import com.reggie.takeout.mapper.DishMapper;
 import com.reggie.takeout.service.DishFlavorService;
 import com.reggie.takeout.service.DishService;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * @author shenlijia
+ */
 @Service
 public class DishServiceImpl extends ServiceImpl<DishMapper, Dish> implements DishService {
 
-    @Autowired
+    @Resource
     private DishFlavorService dishFlavorService;
 
-    @Transactional
+    @Override
+    @Transactional(rollbackFor = Exception.class)
     public void saveWithFlavor(DishDto dishDto) {
         this.save(dishDto);
 
@@ -35,7 +39,7 @@ public class DishServiceImpl extends ServiceImpl<DishMapper, Dish> implements Di
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void updateWithFlavor(DishDto dishDto) {
         this.updateById(dishDto);
 

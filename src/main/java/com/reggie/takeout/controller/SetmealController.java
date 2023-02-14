@@ -10,12 +10,17 @@ import com.reggie.takeout.entity.Setmeal;
 import com.reggie.takeout.service.CategoryService;
 import com.reggie.takeout.service.SetmealService;
 import org.springframework.beans.BeanUtils;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * @author shenlijia
+ */
 @RestController
 @RequestMapping("/setmeal")
 public class SetmealController {
@@ -27,17 +32,20 @@ public class SetmealController {
     private CategoryService categoryService;
 
     @PostMapping
+    @CacheEvict(value = "setmealCache", allEntries = true)
     public R<String> save(@RequestBody SetmealDto setmealDto) {
         setmealService.saveWithDish(setmealDto);
         return R.success("新增套餐成功");
     }
 
     @DeleteMapping
+    @CacheEvict(value = "setmealCache", allEntries = true)
     public R<String> removeById(@RequestParam("ids") List<Long> ids) {
         setmealService.removeWithDish(ids);
         return R.success("删除套餐成功");
     }
 
+    @Cacheable(value = "setmealCache", key = "#setmeal.categoryId")
     @GetMapping("list")
     public R<List<Setmeal>> list(Setmeal setmeal) {
         Long categoryId = setmeal.getCategoryId();

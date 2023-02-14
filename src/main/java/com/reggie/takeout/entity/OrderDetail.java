@@ -6,6 +6,9 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 
+/**
+ * @author shenlijia
+ */
 @Data
 public class OrderDetail implements Serializable {
     private static final long serialVersionUID = 1L;
